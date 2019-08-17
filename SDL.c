@@ -30,6 +30,21 @@
  *      http://groups.google.com/group/comp.lang.c/msg/7c7b39328fefab9c
  */
 
+#include "SDL_config.h"
+
+/* Initialization code for SDL */
+
+#include "SDL.h"
+#include "SDL_fatal.h"
+#if !SDL_VIDEO_DISABLED
+#include "video/SDL_leaks.h"
+#endif
+#include "mydebug.h"
+
+#if SDL_THREAD_PTH
+#include <pth.h>
+#endif
+
 char* strtok_r(
     char *str, 
     const char *delim, 
@@ -62,20 +77,6 @@ char* strtok_r(
 
     return ret;
 }
-#include "SDL_config.h"
-
-/* Initialization code for SDL */
-
-#include "SDL.h"
-#include "SDL_fatal.h"
-#if !SDL_VIDEO_DISABLED
-#include "video/SDL_leaks.h"
-#endif
-#include "mydebug.h"
-
-#if SDL_THREAD_PTH
-#include <pth.h>
-#endif
 
 /* Initialization/Cleanup routines */
 #if !SDL_JOYSTICK_DISABLED
