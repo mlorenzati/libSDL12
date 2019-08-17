@@ -1,13 +1,21 @@
 # Makefile for gcc version of SDL
-
-PREFX=/opt/netsurf/m68k-unknown-amigaos/cross
-PREF=/mnt/e/usr/local/amiga/m68k-amigaos/clib
+#
+# changes:
+#  18-Apr: _ApolloKeyRGB565toRGB565: disabled AMMX version of ColorKeying (for now, storem is not working in Gold2)
+#  17-Nov: - fixed Shadow Surfaces (hopefully), they were effectively impossible
+#            in the code base I got
+#          - fixed ARGB32 (CGX code was assuming RGBA all the time)
+#  12-Feb: - deleted redundant includes, now only SDL/ directory remains (as it should)
+PREFX=/opt/amigaos-68k
+PREF=/opt/amigaos-68k
 
 		  
-CC := $(PREFX)/bin/m68k-unknown-amigaos-gcc 
-AS := $(PREFX)/bin/m68k-unknown-amigaos-as
-LD := $(PREFX)/bin/m68k-unknown-amigaos-ld
-RL := $(PREFX)/bin/m68k-unknown-amigaos-ranlib
+CC := $(PREFX)/bin/m68k-amigaos-gcc 
+AS := $(PREFX)/bin/m68k-amigaos-as
+AR := $(PREFX)/bin/m68k-amigaos-ar
+LD := $(PREFX)/bin/m68k-amigaos-ld
+RL := $(PREFX)/bin/m68k-amigaos-ranlib
+VASM = vasmm68k_mot
 
 DEFINES= DEFINE=ENABLE_CYBERGRAPHICS DEFINE=inline=__inline  DEFINE=NO_SIGNAL_H DEFINE=HAVE_STDIO_H DEFINE=ENABLE_AHI
 
@@ -17,10 +25,12 @@ INCLUDES= IDIR=./include/SDL
 #CFLAGS = CPU=68060  CODE=FAR DATA=FAR -I. -I../include -DNOIXEMUL
 #DEBUG=FULL VERBOSE
 
-GCCFLAGS = -I/mnt/e/usr/local/amiga/clib/m68k-unknown-amigaos/env/include/ -I./include/ -I./include/SDL\
-			-I/mnt/e/usr/local/amiga/clib/m68k-unknown-amigaos/env/include/  -I$(PREF)/extra/include  \
-			-O3 -fomit-frame-pointer -m68020-60 -msoft-float -mnobitfield -DNO_AMIGADEBUG -DNOIXEMUL
-GLFLAGS = -DSHARED_LIB -DNO_AMIGADEBUG -lamiga
+GCCFLAGS = -I$(PREF)/include -I./include/ -I./include/SDL \
+			-Os -fomit-frame-pointer -m68040 -mhard-float \
+			-DNOIXEMUL -D_HAVE_STDINT_H
+GLFLAGS = -DSHARED_LIB -lamiga
+GCCFLAGS += -DNO_AMIGADEBUG
+GLFLAGS  += -DNO_AMIGADEBUG
 
 
 GCCDEFINES = -DENABLE_CYBERGRAPHICS -DNO_SIGNAL_H -D__MEM_AMIGA -DENABLE_AHI 
@@ -41,6 +51,19 @@ GOBJS = audio/SDL_audio.go audio/SDL_audiocvt.go audio/SDL_mixer.go audio/SDL_wa
    video/amigaos/SDL_cgxyuv.go video/amigaos/SDL_cgxaccel.go video/amigaos/SDL_cgxgl_wrapper.go \
    video/SDL_gamma.go SDL_lutstub.ll stdlib/SDL_stdlib.go stdlib/SDL_string.go stdlib/SDL_malloc.go stdlib/SDL_getenv.go
 
+#
+# BEGIN APOLLO ASM SUPPORT
+# ( build vasm: make CPU=m68k SYNTAX=mot )
+VFLAGS = -devpac -I$(PREF)/m68k-amigaos/ndk-include -Fhunk
+GCCFLAGS += -DAPOLLO_BLIT -I./video/apollo
+#GCCFLAGS += -DAPOLLO_BLITDBG
+GOBJS += video/apollo/blitapollo.ao video/apollo/apolloammxenable.ao video/apollo/colorkeyapollo.ao
+
+%.ao: %.asm
+	$(VASM) $(VFLAGS) -o $@ $*.asm
+#
+# END APOLLO ASM SUPPORT
+#
 
 %.go: %.c
 	$(CC) $(GCCFLAGS) $(GCCDEFINES) -o $@ -c $*.c
@@ -50,11 +73,12 @@ GOBJS = audio/SDL_audio.go audio/SDL_audiocvt.go audio/SDL_mixer.go audio/SDL_wa
 
 all: libSDL.a
 
+
 libSDL.a: $(GOBJS)
 	-rm -f libSDL.a
-	ar cru libSDL.a $(GOBJS)
+	$(AR) cru libSDL.a $(GOBJS)
 	$(RL) libSDL.a
-	-cp libSDL.a $(PREF)/extra/lib
+#	-cp libSDL.a $(PREF)/extra/lib
 
 
 clean:
