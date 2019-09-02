@@ -26,7 +26,7 @@ INCLUDES= IDIR=./include/SDL
 #DEBUG=FULL VERBOSE
 
 GCCFLAGS = -I$(PREF)/include -I./include/ -I./include/SDL \
-			-Os -fomit-frame-pointer -m68040 -mhard-float \
+			-O3 -fomit-frame-pointer -m68040 -mhard-float -ffast-math -fbbb=-\
 			-DNOIXEMUL -D_HAVE_STDINT_H
 GLFLAGS = -DSHARED_LIB -lamiga
 GCCFLAGS += -DNO_AMIGADEBUG
