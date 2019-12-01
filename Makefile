@@ -7,7 +7,6 @@
 #          - fixed ARGB32 (CGX code was assuming RGBA all the time)
 #  12-Feb: - deleted redundant includes, now only SDL/ directory remains (as it should)
 PREFX=/opt/amigaos-68k
-PREF=/opt/amigaos-68k
 
 		  
 CC := $(PREFX)/bin/m68k-amigaos-gcc 
@@ -21,12 +20,9 @@ DEFINES= DEFINE=ENABLE_CYBERGRAPHICS DEFINE=inline=__inline  DEFINE=NO_SIGNAL_H 
 
 # DEFINE=HAVE_OPENGL
 INCLUDES= IDIR=./include/SDL
-#-I$(PREF)/m68k-unknown-amigaos/include -I$(PREF)/env/m68k-unknown-amigaos/sys-include
-#CFLAGS = CPU=68060  CODE=FAR DATA=FAR -I. -I../include -DNOIXEMUL
-#DEBUG=FULL VERBOSE
 
-GCCFLAGS = -I$(PREF)/include -I./include/ -I./include/SDL \
-			-O3 -fomit-frame-pointer -m68040 -mhard-float -ffast-math -fbbb=-\
+GCCFLAGS = -I$(PREFX)/include -I./include/ -I./include/SDL \
+			-O3 -fomit-frame-pointer -m68040 -mhard-float -ffast-math -noixemul \
 			-DNOIXEMUL -D_HAVE_STDINT_H
 GLFLAGS = -DSHARED_LIB -lamiga
 GCCFLAGS += -DNO_AMIGADEBUG
@@ -54,7 +50,7 @@ GOBJS = audio/SDL_audio.go audio/SDL_audiocvt.go audio/SDL_mixer.go audio/SDL_wa
 #
 # BEGIN APOLLO ASM SUPPORT
 # ( build vasm: make CPU=m68k SYNTAX=mot )
-VFLAGS = -devpac -I$(PREF)/m68k-amigaos/ndk-include -Fhunk
+VFLAGS = -devpac -I$(PREFX)/m68k-amigaos/ndk-include -Fhunk
 GCCFLAGS += -DAPOLLO_BLIT -I./video/apollo
 #GCCFLAGS += -DAPOLLO_BLITDBG
 GOBJS += video/apollo/blitapollo.ao video/apollo/apolloammxenable.ao video/apollo/colorkeyapollo.ao
@@ -78,7 +74,6 @@ libSDL.a: $(GOBJS)
 	-rm -f libSDL.a
 	$(AR) cru libSDL.a $(GOBJS)
 	$(RL) libSDL.a
-#	-cp libSDL.a $(PREF)/extra/lib
 
 
 clean:
