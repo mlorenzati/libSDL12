@@ -115,7 +115,7 @@ FUSE68	macro
 ;
 ;------------------------------------------------------------------------------------------------
 ;------------------------------------------------------------------------------------------------
-	section	code,code
+	section .text
 
 ; Called once per burned fuse function
 ; (note: could be optimized to burn all fuses at once)

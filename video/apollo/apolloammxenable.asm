@@ -15,7 +15,7 @@
 	include	lvo/exec_lib.i
 	include	exec/exec.i
 
-	section	code,code
+	section .text
 
 ; ASM _SAVEDS int Apollo_EnableAMMX( void );
 ;

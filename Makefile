@@ -6,7 +6,7 @@
 #            in the code base I got
 #          - fixed ARGB32 (CGX code was assuming RGBA all the time)
 #  12-Feb: - deleted redundant includes, now only SDL/ directory remains (as it should)
-PREFX=/opt/amigaos-68k
+PREFX=/d/amiga-gcc2/
 
 		  
 CC := $(PREFX)/bin/m68k-amigaos-gcc 
@@ -22,7 +22,7 @@ DEFINES= DEFINE=ENABLE_CYBERGRAPHICS DEFINE=inline=__inline  DEFINE=NO_SIGNAL_H 
 INCLUDES= IDIR=./include/SDL
 
 GCCFLAGS = -I$(PREFX)/include -I./include/ -I./include/SDL \
-			-O3 -fomit-frame-pointer -m68040 -mhard-float -ffast-math -noixemul \
+			-O3 -fomit-frame-pointer -m68080 -mhard-float -ffast-math -noixemul\
 			-DNOIXEMUL -D_HAVE_STDINT_H
 GLFLAGS = -DSHARED_LIB -lamiga
 GCCFLAGS += -DNO_AMIGADEBUG

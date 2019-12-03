@@ -31,6 +31,23 @@
 #include "../events/SDL_sysevents.h"
 #include "../events/SDL_events_c.h"
 
+#include <dos/dos.h>
+#include <exec/exec.h>
+
+extern struct ExecBase *SysBase;
+static short ac68080 = 0;
+void *old_buffer;
+
+static int is_vampire()
+{
+	if (SysBase->AttnFlags &(1 << 10)) {
+		printf("Vampire accelerator detected, using SAGA Direct Draw\n");
+		return 1;
+	}
+	else
+		return 0;
+}
+
 /* Available video drivers */
 static VideoBootStrap *bootstrap[] = {
 #if SDL_VIDEO_DRIVER_DIRECTFB
@@ -69,7 +86,9 @@ int SDL_VideoInit (const char *driver_name, Uint32 flags)
 	int i;
 	SDL_PixelFormat vformat;
 	Uint32 video_flags;
-
+	
+	ac68080 = is_vampire();
+	
 	/* Toggle the event thread flags, based on OS requirements */
 #if defined(MUST_THREAD_EVENTS)
 	flags |= SDL_INIT_EVENTTHREAD;
@@ -1024,7 +1043,7 @@ void SDL_UpdateRects (SDL_Surface *screen, int numrects, SDL_Rect *rects)
 /*
  * Performs hardware double buffering, if possible, or a full update if not.
  */
-int SDL_Flip(SDL_Surface *screen)
+int SDL_Flip_m68k(SDL_Surface *screen)
 {
 	extern int skipframe,toggle;
 	SDL_VideoDevice *video;
@@ -1082,6 +1101,19 @@ int SDL_Flip(SDL_Surface *screen)
 	}
 	return(0);
 }
+
+int SDL_Flip(SDL_Surface *screen)
+{
+	if (ac68080)	{
+		old_buffer = screen->pixels;
+		screen->pixels = (void*)(~31 & (31+(Uint32)old_buffer));
+		*(volatile Uint32 *) 0xDFF1EC = (Uint32)screen->pixels;
+		return(0);
+	}
+	else
+		return SDL_Flip_m68k(screen);
+}
+ 
 
 static void SetPalette_logical(SDL_Surface *screen, SDL_Color *colors,
 			       int firstcolor, int ncolors)
