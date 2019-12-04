@@ -31,14 +31,14 @@ Building
 --------
 
 Several Makefiles for different targets are present in this codebase. The one
-I was using for the AMMX enabled builds is "Makefile.bax". The compilers I've 
+I was using for the AMMX enabled builds is "Makefile". The compilers I've 
 successfully used were gcc2.95 and gcc6.3.1b (20171120).
 
 The static libSDL.a can be built by
 
-    make -f Makefile.bax
+    make CPU=68040 PREFX=/path/to/amiga-gcc/root
 
-I assume a cross-compile environment at /opt/amigaos-68k. Change the prefix path
+If no PREFX is defined during make, the default will be /opt/m68k-amigaos. Change the prefix path
 as necessary. Compiler, Assembler and Linker binary names might need adjusting, too.
 Please also have a look at VFLAGS. The old cross-compile toolchain I had was putting
 the AmigaOS includes into "os-include". The recently released GCC6 toolchain by Bebbo
@@ -53,7 +53,8 @@ Usage
 
 When compiling SDL programs, I usually set the following flags to gcc: 
 
-    -noixemul -O3 -fomit-frame-pointer -m68020-60 -msoft-float 
+    -noixemul -O3 -fomit-frame-pointer -m68020-60 -mhard-float 
+
+-mhard-float should only be used for binaries compiled for systems that has an FPU installed. For FPU-less setups use -msoft-float
 
 The Linker commands should include -noixemul and -lSDL
-
