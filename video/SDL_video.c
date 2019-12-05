@@ -35,7 +35,7 @@
 #include <exec/exec.h>
 
 extern struct ExecBase *SysBase;
-static short ac68080 = 0;
+short ac68080 = 0;
 void *old_buffer;
 
 static int is_vampire()
