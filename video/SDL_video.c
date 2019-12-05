@@ -35,7 +35,7 @@
 #include <exec/exec.h>
 
 extern struct ExecBase *SysBase;
-static short ac68080 = 0;
+short ac68080 = 0;
 void *old_buffer;
 
 static int is_vampire()
@@ -839,7 +839,6 @@ SDL_Surface * SDL_SetVideoMode (int width, int height, int bpp, Uint32 flags)
 	  //if  (!(SDL_VideoSurface->flags & SDL_OPENGL) &&
 	  //    !(flags2 & SDL_HWSURFACE))
 	  {
-		//printf("Create Shadow surface\n");
        		kprintf("Create Shadow surface\n");
 		 
 		SDL_CreateShadowSurface(bpp);//mode->format->BitsPerPixel);
@@ -853,7 +852,6 @@ SDL_Surface * SDL_SetVideoMode (int width, int height, int bpp, Uint32 flags)
 		else 
 		{
 		kprintf("Using no Shadowsurface \n");
-		//printf("Using no Shadowsurface\n");
 
 		SDL_PublicSurface = SDL_VideoSurface;
 		}
@@ -861,6 +859,9 @@ SDL_Surface * SDL_SetVideoMode (int width, int height, int bpp, Uint32 flags)
 	video->info.vfmt = SDL_VideoSurface->format;
 	video->info.current_w = SDL_VideoSurface->w;
 	video->info.current_h = SDL_VideoSurface->h;
+
+	if (flags&SDL_FULLSCREEN)
+		ac68080 = 0;
 
 	/* We're done! */
 	
