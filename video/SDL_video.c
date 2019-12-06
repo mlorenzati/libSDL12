@@ -860,7 +860,7 @@ SDL_Surface * SDL_SetVideoMode (int width, int height, int bpp, Uint32 flags)
 	video->info.current_w = SDL_VideoSurface->w;
 	video->info.current_h = SDL_VideoSurface->h;
 
-	if (flags&SDL_FULLSCREEN)
+	if (!(flags&SDL_FULLSCREEN))
 		ac68080 = 0;
 
 	/* We're done! */
