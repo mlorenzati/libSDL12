@@ -68,7 +68,6 @@ static char rcsid =
 #ifdef __cplusplus
 extern "C" {
 #endif
-//#define Bug kprintf
 
 unsigned long _sdl_windowaddr;
 
@@ -365,7 +364,6 @@ Uint32 MakeBitMask(_THIS,int type,int format,int *bpp, struct SDL_Surface *scree
 			switch(type)
 			{
 				case 0:  
-					//kprintf("RGB16PC/BGR16\n");
 					return 0;
 					//return 0b11111000; //248
 					return 248; // old
@@ -634,7 +632,7 @@ static int CGX_VideoInit(_THIS, SDL_PixelFormat *vformat)
 									SA_DisplayID,okid,
 									TAG_DONE);
 		}
-		else kprintf("Cant get a valid screenmode ID with BestCModeIDTags\n");
+		else D(bug("Cant get a valid screenmode ID with BestCModeIDTags\n"));
 
 		if(!GFX_Display)
 		{
@@ -651,7 +649,7 @@ static int CGX_VideoInit(_THIS, SDL_PixelFormat *vformat)
 
 	swap_pixels = 0;
 
-// Non e' detto che sia cosi' pero', alcune schede potrebbero gestire i modi in modo differente
+	// Non e' detto che sia cosi' pero', alcune schede potrebbero gestire i modi in modo differente
 	D(bug("Before GetVideoModes....\n"));
 
 	/* Get the available video modes */
@@ -663,7 +661,6 @@ static int CGX_VideoInit(_THIS, SDL_PixelFormat *vformat)
 
 	for(i = 0; i < this->hidden->nvisuals; i++)
 	{
-		//kprintf(" num %ld depths here %ld \n",this->hidden->nvisuals,this->hidden->visuals[i].depth);
 	    if(this->hidden->visuals[i].depth == GetCyberMapAttr(SDL_Display->RastPort.BitMap,CYBRMATTR_DEPTH))	break;
 	}
 	if(i == this->hidden->nvisuals) {
@@ -675,7 +672,6 @@ static int CGX_VideoInit(_THIS, SDL_PixelFormat *vformat)
 //	SDL_XColorMap = SDL_DisplayColormap;
 
 	this->hidden->depth = this->hidden->visuals[i].depth;
-	//kprintf("Init: Setting screen depth to: %ld\n",this->hidden->depth));
 	vformat->BitsPerPixel = this->hidden->visuals[i].depth; /* this->hidden->visuals[i].bpp; */
 	D(bug("depth %ld hidden depth %ld\n",vformat->BitsPerPixel, this->hidden->depth));
 	
@@ -822,8 +818,7 @@ int CGX_CreateWindow(_THIS, SDL_Surface *screen,
 	Uint32 vis;
 #endif
 	D(bug("CGX_CreateWindow %d\n",bpp));
-    //kprintf("%ld %ld\n",screen->flags,flags);
-	//kprintf("window depth %ld\n",bpp);
+
 	/* If a window is already present, destroy it and start fresh */
 	if ( SDL_Window ) {
 		CGX_DestroyWindow(this, screen);
@@ -978,7 +973,6 @@ int CGX_CreateWindow(_THIS, SDL_Surface *screen,
 				D(bug("Opening WB window of size: %ldx%ld!\n",w,h));
 			}
 			
-        //kprintf("%lx\n",SDL_Window);
 		if(!SDL_Window)
 			return -1;
 	}
@@ -1001,7 +995,6 @@ int CGX_CreateWindow(_THIS, SDL_Surface *screen,
 	this->hidden->BytesPerPixel=GetCyberMapAttr(SDL_Window->RPort->BitMap,CYBRMATTR_BPPIX);
 	{
 	    long val= this->hidden->BytesPerPixel;
-	    //kprintf("bytes per pix %ld\n",val);
 	}
 	if(screen->flags & SDL_DOUBLEBUF)
 	{
@@ -1063,7 +1056,6 @@ int CGX_CreateWindow(_THIS, SDL_Surface *screen,
 		}
 	}
 	_sdl_windowaddr = SDL_Window;
-	//kprintf("bit %ld byte / Pixel %ld render buffer addr %lx \n",screen->format->BitsPerPixel,this->hidden->BytesPerPixel,screen->pixels);
 	return 0;
 }
 
@@ -1121,7 +1113,6 @@ static SDL_Surface *CGX_SetVideoMode(_THIS, SDL_Surface *current,
 		GFX_Display=SDL_Display=LockPubScreen(NULL);
 
 		bpp=this->hidden->depth=GetCyberMapAttr(SDL_Display->RastPort.BitMap,CYBRMATTR_DEPTH);
-        //kprintf("Set Video mode depth %ld\n",bpp);
 		for ( i = 0; i < this->hidden->nvisuals; i++ ) {
 			if ( this->hidden->visuals[i].depth == bpp ) /* era .depth */
 				break;
@@ -1273,12 +1264,12 @@ buildnewscreen:
 				if( dbscroll )
 				 this->hidden->dbscrollscreen = 1; /* use scrolling screen for double buffer */
 			}
-			else kprintf("2: Cant get a valid screenmode ID with BestCModeIDTags\n");
+			else D(bug("2: Cant get a valid screenmode ID with BestCModeIDTags\n");
 			if(!GFX_Display) {
 				GFX_Display=SDL_Display;
 				flags &= ~SDL_FULLSCREEN;
 				flags &= ~SDL_DOUBLEBUF;
-				kprintf("Screen cant open \n");
+				D(bug("Screen cant open \n"));
 			}
 			else {
 				UnlockPubScreen(NULL,SDL_Display);
@@ -1337,7 +1328,7 @@ buildnewscreen:
 								}
 
 								ok=1;
-								kprintf("Dbuffering enabled!\n");
+								D(bug("Double buffering enabled!\n"));
 								this->hidden->dbuffer=1;
 								current->flags|=SDL_DOUBLEBUF;
 							}
@@ -1359,7 +1350,6 @@ buildnewscreen:
 		}
         
 		bpp=this->hidden->depth=GetCyberMapAttr(SDL_Display->RastPort.BitMap,CYBRMATTR_DEPTH);
-		//kprintf("Set Video mode depth %ld\n",bpp);
 		D(bug("Setting screen depth to: %ld\n",this->hidden->depth));
 
 		for ( i = 0; i < this->hidden->nvisuals; i++ )
@@ -1371,7 +1361,7 @@ buildnewscreen:
 			return NULL;	/* should never happen */
 		}
 		//SDL_Visual = this->hidden->visuals[i].visual;
-        SDL_Visual = this->hidden->visuals[i].visual; //no changecreen
+		SDL_Visual = this->hidden->visuals[i].visual; //no changecreen
 	}
 
 	/* Set up the X11 window */
