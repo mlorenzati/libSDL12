@@ -65,6 +65,9 @@ static char rcsid =
 #include <stdlib.h>
 #include <proto/alib.h>
 #endif
+
+#include "../../mydebug.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
