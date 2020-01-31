@@ -41,6 +41,8 @@ static char rcsid =
     #define RECTFMT_RAW	(5UL)
 #endif
 
+#include "../../mydebug.h"
+
 // this is an undocumented feature of CGX, and recently of AROS
 // and P96, if it's not defined let define it ourselves.
 
@@ -76,8 +78,6 @@ static void WLPA(SDL_Surface *s,SDL_Rect *rect,struct RastPort *rp,APTR colortab
 
 static void WLPA(SDL_Surface *s,SDL_Rect *rect,struct RastPort *rp,APTR colortable,struct Window *win)
 {
-	kprintf(".");
-
 	WriteLUTPixelArray(s->pixels,rect->x, rect->y,s->pitch,rp,colortable,
 		win->BorderLeft+rect->x,win->BorderTop+rect->y,rect->w,rect->h,CTABFMT_XRGB8);
 }
@@ -157,12 +157,12 @@ int CGX_SetupImage(_THIS, SDL_Surface *screen)
 	if(screen->flags&SDL_HWSURFACE) 
 	{
 		if (this->hidden->swap_bytes && this->hidden->depth == 16)
-		{ kprintf ("Slow 16 bit pixel swap need better use a rgb16 screenmode \n");
+		{ D(bug("Slow 16 bit pixel swap need better use a rgb16 screenmode \n"));
 		format = BMF_DISPLAYABLE | BMF_MINPLANES| BMF_SPECIALFMT|(PIXFMT_RGB16<< 24);
 		friendbmap = 0;
 		}	
 		if (this->hidden->swap_bytes && this->hidden->depth == 32)
-		{ kprintf ("Slow 32 bit pixel swap need better use a BGRA Screenmode \n");
+		{ D(bug("Slow 32 bit pixel swap need better use a BGRA Screenmode \n"));
 		format = BMF_DISPLAYABLE | BMF_MINPLANES| BMF_SPECIALFMT|(PIXFMT_BGRA32<< 24);
 		friendbmap = 0;
 		}
@@ -178,20 +178,24 @@ int CGX_SetupImage(_THIS, SDL_Surface *screen)
 		screen->hwdata->allocated=0;
 		screen->hwdata->mask=NULL;
 		screen->hwdata->videodata=this;
-	//if ((!screen->flags&SDL_FULLSCREEN))
+		
+		//if ((!screen->flags&SDL_FULLSCREEN))
 		{    
 			if (AvailMem(MEMF_LARGEST) < (screen->w * screen->h * (this->hidden->depth /8) + 500000))
 			{
-			 kprintf("too few RAM for other bitmap \n");return -1;
+				D(bug("Too little RAM for other bitmap \n"));
+				return -1;
 			}
 			if (!(this->hidden->bmap=AllocBitMap(screen->w,screen->h,this->hidden->depth,format,friendbmap)))
 			{
 			 format &= ~BMF_DISPLAYABLE;	
 			 if (!(this->hidden->bmap=AllocBitMap(screen->w,screen->h,this->hidden->depth,format,friendbmap)))
-			 {kprintf ("cant alloc Bitmap\n");return -1;}
+			 {D(bug("cant alloc Bitmap\n"));
+				return -1;
+			 }
 		   	}
 		        screen->hwdata->bmap = this->hidden->bmap;
-		        kprintf ("before lock %lx\n",screen->hwdata->bmap );	
+		        D(bug("before lock %lx\n",screen->hwdata->bmap ));	
 			if(!(screen->hwdata->lock=LockBitMapTags(screen->hwdata->bmap,
 				LBMI_BASEADDRESS,(ULONG)&screen->pixels,
 				LBMI_BYTESPERROW,(ULONG)&pitch,TAG_DONE))) {
@@ -204,7 +208,7 @@ int CGX_SetupImage(_THIS, SDL_Surface *screen)
 			 UnLockBitMap(screen->hwdata->lock);
 			 screen->hwdata->lock=NULL;
 			}
-			kprintf ("after lock\n");
+			D(bug("after lock\n"));
 		     screen->pitch=pitch;
 		     this->UpdateRects = CGX_NormalUpdate;
 			 return 0;
@@ -226,7 +230,7 @@ int CGX_SetupImage(_THIS, SDL_Surface *screen)
  		this->UpdateRects = (void (*)(_THIS, int numrects, SDL_Rect *rects) )CGX_FlipHWSurface; 
 		screen->pitch=pitch;
 
-		kprintf("HWSURFACE create\n");
+		D(bug("HWSURFACE created\n"));
 		D(bug("Accel video image configured (%lx, pitch %ld).\n",screen->pixels,screen->pitch));
 		return 0;
 	}
@@ -411,7 +415,6 @@ void CGX_UnlockHWSurface(_THIS, SDL_Surface *surface)
 	{
 		UnLockBitMap(surface->hwdata->lock);
 		surface->hwdata->lock=NULL;
-		//kprintf("%lx\n",surface->pixels);
 		//surface->pixels=0xdeadbeef;
 	}
 }
@@ -428,7 +431,6 @@ int CGX_FlipHWSurface(_THIS, SDL_Surface *surface)
 	int mustlock = 0;
 	ULONG pitch;
 
-    //kprintf("before change\n"); 
 	//surface->hwdata->bmap=SDL_RastPort->BitMap=this->hidden->SB[current]->sb_BitMap;
 
 	/* */
@@ -486,8 +488,7 @@ int CGX_FlipHWSurface(_THIS, SDL_Surface *surface)
 				;
 			SafeChange=TRUE;
 		}
-       //kprintf("before change2\n"); 
-       //TRAP
+
 	        ret = ChangeScreenBuffer(SDL_Display,this->hidden->SB[current^1]);
 	   
 		{
@@ -496,7 +497,6 @@ int CGX_FlipHWSurface(_THIS, SDL_Surface *surface)
 			SafeDisp=FALSE;
 			current^=1;
 		}
-		//kprintf("after change\n");
 		
 		if(!SafeDisp)
 		{
@@ -506,7 +506,6 @@ int CGX_FlipHWSurface(_THIS, SDL_Surface *surface)
 			SafeDisp=TRUE;
 		}
 		//SDL_Delay(1);
-        //kprintf("after change2\n");
 	 } /* dbscrollscreen */
 	}
 	return(0);
