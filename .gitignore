@@ -2,3 +2,4 @@
 *.go
 *.a
 /Default/
+.idea/

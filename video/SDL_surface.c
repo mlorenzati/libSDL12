@@ -49,20 +49,20 @@ SDL_Surface * SDL_CreateRGBSurface (Uint32 flags,
 		SDL_SetError("Width or height is too large");
 		return(NULL);
 	}
-    
+
 	/* Check to see if we desire the surface in video memory */
 	if ( video ) {
-		
+
 		screen = SDL_PublicSurface;
 	} else {
 		screen = NULL;
 	}
-	
+
 	if ( screen && ((screen->flags&SDL_HWSURFACE) == SDL_HWSURFACE) ) {
-		
+
 		if ( (flags&(SDL_SRCCOLORKEY|SDL_SRCALPHA)) != 0 ) {
 			flags |= SDL_HWSURFACE;
-			
+
 		}
 		if ( (flags & SDL_SRCCOLORKEY) == SDL_SRCCOLORKEY ) {
 			if ( ! current_video->info.blit_hw_CC ) {
@@ -93,7 +93,7 @@ SDL_Surface * SDL_CreateRGBSurface (Uint32 flags,
 			Gmask = video->displayformatalphapixel->Gmask;
 			Bmask = video->displayformatalphapixel->Bmask;
 			Amask = video->displayformatalphapixel->Amask;
-			
+
 		}
 		else
 		{
@@ -103,7 +103,7 @@ SDL_Surface * SDL_CreateRGBSurface (Uint32 flags,
 			Bmask = screen->format->Bmask;
 			Amask = screen->format->Amask;
 		}
-		 
+
 	}
 	surface->format = SDL_AllocFormat(depth, Rmask, Gmask, Bmask, Amask);
 	if ( surface->format == NULL ) {
@@ -124,10 +124,10 @@ SDL_Surface * SDL_CreateRGBSurface (Uint32 flags,
 	surface->unused1 = 0;
 	SDL_SetClipRect(surface, NULL);
 	SDL_FormatChanged(surface);
-     
+
 	/* Get the pixels */
-	
-	if ( ((flags&SDL_HWSURFACE) == SDL_SWSURFACE) || 
+
+	if ( ((flags&SDL_HWSURFACE) == SDL_SWSURFACE) ||
 				(video->AllocHWSurface(this, surface) < 0) ) {
 		if ( surface->w && surface->h ) {
 			surface->pixels = SDL_malloc(surface->h*surface->pitch);
@@ -413,13 +413,13 @@ void SDLA_SetQuickLazyBlit(SDL_Surface *surface, Uint32 yesno )
 }
 
 
-/* 
+/*
  * Set up a blit between two surfaces -- split into three parts:
- * The upper part, SDL_UpperBlit(), performs clipping and rectangle 
+ * The upper part, SDL_UpperBlit(), performs clipping and rectangle
  * verification.  The lower part is a pointer to a low level
  * accelerated blitting function.
  *
- * These parts are separated out and each used internally by this 
+ * These parts are separated out and each used internally by this
  * library in the optimimum places.  They are exported so that if
  * you know exactly what you are doing, you can optimize your code
  * by calling the one(s) you need.
@@ -448,7 +448,7 @@ int SDL_LowerBlit (SDL_Surface *src, SDL_Rect *srcrect,
 	{
 		/* Check to make sure the blit mapping is valid */
 		if ( (src->map->dst != dst) ||
-        	     (src->map->dst->format_version != src->map->format_version) ) 
+        	     (src->map->dst->format_version != src->map->format_version) )
 		     {
 			if ( SDL_MapSurface(src, dst) < 0 ) {
 				return(-1);
@@ -484,7 +484,7 @@ int SDL_UpperBlit (SDL_Surface *src, SDL_Rect *srcrect,
         SDL_Rect fulldst;
 	int srcx, srcy, w, h;
 	extern int toggle,skipframe;
-    
+
 	/* Make sure the surfaces aren't locked */
 	if ( ! src || ! dst ) {
 		SDL_SetError("SDL_UpperBlit: passed a NULL surface");
@@ -504,7 +504,7 @@ int SDL_UpperBlit (SDL_Surface *src, SDL_Rect *srcrect,
 	/* clip the source rectangle to the source surface */
 	if(srcrect) {
 	        int maxw, maxh;
-	
+
 		srcx = srcrect->x;
 		w = srcrect->w;
 		if(srcx < 0) {
@@ -526,7 +526,7 @@ int SDL_UpperBlit (SDL_Surface *src, SDL_Rect *srcrect,
 		maxh = src->h - srcy;
 		if(maxh < h)
 			h = maxh;
-	    
+
 	} else {
 	        srcx = srcy = 0;
 		w = src->w;
@@ -585,7 +585,7 @@ static int SDL_FillRect4(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
 	return -1;
 }
 
-/* 
+/*
  * This function performs a fast fill of the given rectangle with 'color'
  */
 int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
@@ -594,7 +594,7 @@ int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
 	SDL_VideoDevice *this  = current_video;
 	int x, y;
 	Uint8 *row;
-    
+
 	/* This function doesn't work on surfaces < 8 bpp */
 	if ( dst->format->BitsPerPixel < 8 ) {
 		switch(dst->format->BitsPerPixel) {
@@ -608,7 +608,7 @@ int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
 			SDL_SetError("Fill rect on unsupported surface format");
 			return(-1);
 			break;
-		} 
+		}
 	}
 
 	/* If 'dstrect' == NULL, then fill the whole surface */
@@ -632,7 +632,7 @@ int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
 			dstrect = &hw_rect;
 		}
 		{
-			
+
 		return(video->FillHWRect(this, dst, dstrect, color));
 		}
 	}
@@ -651,11 +651,11 @@ int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
 				SDL_memset4(row, 0, n);
 				row += dst->pitch;
 			}
-		} else {		
+		} else {
 				for(y = dstrect->h; y; y--) {
 					SDL_memset(row, color, x);
 					row += dst->pitch;
-				}			
+				}
 		}
 	} else {
 		switch (dst->format->BytesPerPixel) {
@@ -760,7 +760,7 @@ void SDL_UnlockSurface (SDL_Surface *surface)
 	}
 }
 
-/* 
+/*
  * Convert a surface into the specified pixel format.
  */
 SDL_Surface * SDL_ConvertSurface (SDL_Surface *surface,
@@ -796,7 +796,6 @@ SDL_Surface * SDL_ConvertSurface (SDL_Surface *surface,
 	}
 
 	/* Create a new surface with the desired format */
-	//kprintf("%ld %d %d\n",format->BitsPerPixel,format->Rmask,format->Amask);
 	convert = SDL_CreateRGBSurface(flags,
 				surface->w, surface->h, format->BitsPerPixel,
 		format->Rmask, format->Gmask, format->Bmask, format->Amask);
