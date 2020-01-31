@@ -175,7 +175,7 @@ int mywaitinit(struct mywaitdata *data, Uint32 timeout)
 		data->timereq.tr_node.io_Message.mn_ReplyPort    = &data->port;
 		data->timereq.tr_node.io_Message.mn_Length       = sizeof(data->timereq);
 		error = OpenDevice( TIMERNAME, UNIT_MICROHZ,(struct IORequest *) &data->timereq, 0L );
-		if (error)kprintf("cant open timer device\n");
+		if (error) D(bug("Can't open timer device\n"));
 		//data->timereq.tr_node.io_Device                  = req->tr_node.io_Device;
 		//data->timereq.tr_node.io_Unit                    = req->tr_node.io_Unit;
 
@@ -262,7 +262,7 @@ void SDL_DestroySemaphore(SDL_sem *sem)
 
 	if (sem)
 	{
-		#if 1
+#if 1
 
 		struct mywaitdata data;
 
@@ -287,7 +287,7 @@ void SDL_DestroySemaphore(SDL_sem *sem)
 				}
 
 				ReleaseSemaphore(&sem->sem);
-                Delay(2);
+				Delay(2);
 				res = mywait(&data, 10);
 
 				ObtainSemaphore(&sem->sem);
@@ -303,7 +303,7 @@ void SDL_DestroySemaphore(SDL_sem *sem)
 
 		mywaitdone(&data);
 
-		#endif
+#endif
 
 		free(sem);
 	}
