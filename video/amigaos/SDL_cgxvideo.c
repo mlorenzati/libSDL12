@@ -1264,7 +1264,7 @@ buildnewscreen:
 				if( dbscroll )
 				 this->hidden->dbscrollscreen = 1; /* use scrolling screen for double buffer */
 			}
-			else D(bug("2: Cant get a valid screenmode ID with BestCModeIDTags\n");
+			else D(bug("2: Cant get a valid screenmode ID with BestCModeIDTags\n"));
 			if(!GFX_Display) {
 				GFX_Display=SDL_Display;
 				flags &= ~SDL_FULLSCREEN;
@@ -1634,7 +1634,7 @@ static void CGX_VideoQuit(_THIS)
 		CGX_DestroyImage(this, this->screen);
 		D(bug("Destroying window...\n"));
 		CGX_DestroyWindow(this, this->screen);
-// Otherwise SDL_VideoQuit will try to free it!
+		// Otherwise SDL_VideoQuit will try to free it!
 		SDL_VideoSurface=NULL;
 
 		CGX_FreeVideoModes(this);
