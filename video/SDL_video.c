@@ -377,8 +377,9 @@ static int SDL_GetVideoMode (int *w, int *h, int *BitsPerPixel, Uint32 flags)
 
 	/* Try the original video mode, get the closest depth */
 	native_bpp = SDL_VideoModeOK(*w, *h, *BitsPerPixel, flags);
+#ifdef DEBUG_VIDEO
 	kprintf("screen depth %ld\n",native_bpp);
-	
+#endif	
 	if ( native_bpp == *BitsPerPixel ) {
 		return(1);
 	}
@@ -632,7 +633,11 @@ SDL_Surface * SDL_SetVideoMode (int width, int height, int bpp, Uint32 flags)
 	 * that case?  Should we call SDL_VideoInit() again?
 	 */
 	SDL_VideoSurface = (mode != NULL) ? mode : prev_mode;
-    kprintf("surface depth of SDL_VideoSurface %ld \n",SDL_VideoSurface->format->BitsPerPixel);
+
+#ifdef DEBUG_VIDEO
+	kprintf("surface depth of SDL_VideoSurface %ld \n",SDL_VideoSurface->format->BitsPerPixel);
+#endif
+
 	if ( (mode != NULL) && (!is_opengl) ) {
 		/* Sanity check */
 		if ( (mode->w < width) || (mode->h < height) ) {
@@ -839,7 +844,9 @@ SDL_Surface * SDL_SetVideoMode (int width, int height, int bpp, Uint32 flags)
 	  //if  (!(SDL_VideoSurface->flags & SDL_OPENGL) &&
 	  //    !(flags2 & SDL_HWSURFACE))
 	  {
+#ifdef DEBUG_VIDEO
        		kprintf("Create Shadow surface\n");
+#endif
 		 
 		SDL_CreateShadowSurface(bpp);//mode->format->BitsPerPixel);
 
@@ -851,8 +858,9 @@ SDL_Surface * SDL_SetVideoMode (int width, int height, int bpp, Uint32 flags)
 	   }
 		else 
 		{
+#ifdef DEBUG_VIDEO
 		kprintf("Using no Shadowsurface \n");
-
+#endif
 		SDL_PublicSurface = SDL_VideoSurface;
 		}
 	 
