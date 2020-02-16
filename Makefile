@@ -16,14 +16,14 @@ LD := $(PREFX)/bin/m68k-amigaos-ld
 RL := $(PREFX)/bin/m68k-amigaos-ranlib
 VASM := $(PREFX)/bin/vasmm68k_mot
 
-CPU := 68040
+CPU := 68030
 
 DEFINES= DEFINE=ENABLE_CYBERGRAPHICS DEFINE=inline=__inline  DEFINE=NO_SIGNAL_H DEFINE=HAVE_STDIO_H DEFINE=ENABLE_AHI
 # DEFINE=HAVE_OPENGL
 INCLUDES = IDIR=./include/SDL
 
 GCCFLAGS = -I$(PREFX)/include -I./include/ -I./include/SDL \
-		-O3 -fomit-frame-pointer -m$(CPU) -mhard-float -ffast-math -noixemul \
+		-Ofast -fomit-frame-pointer -m$(CPU) -mhard-float -ffast-math -noixemul \
 		-DNOIXEMUL -D_HAVE_STDINT_H
 GLFLAGS = -DSHARED_LIB -lamiga
 GCCFLAGS += -DNO_AMIGADEBUG
@@ -32,7 +32,7 @@ GLFLAGS  += -DNO_AMIGADEBUG
 GCCDEFINES = -DENABLE_CYBERGRAPHICS -DNO_SIGNAL_H -D__MEM_AMIGA -DENABLE_AHI 
 #-DNO_INLINE_STDARG
 
-GOBJS = audio/SDL_audio.go audio/SDL_audiocvt.go audio/SDL_mixer.go audio/SDL_wave.go audio/amigaos/SDL_ahiaudio.go \
+GOBJS = audio/SDL_audio.go audio/SDL_audiocvt.go audio/SDL_mixer.go audio/SDL_mixer_m68k.go audio/SDL_wave.go audio/amigaos/SDL_ahiaudio.go \
 	SDL_error.go SDL_fatal.go video/SDL_RLEaccel.go video/SDL_blit.go video/SDL_blit_0.go \
 	video/SDL_blit_1.go video/SDL_blit_A.go video/SDL_blit_N.go \
 	video/SDL_bmp.go video/SDL_cursor.go video/SDL_pixels.go video/SDL_surface.go video/SDL_stretch.go \
