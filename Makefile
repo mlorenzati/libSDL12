@@ -1,21 +1,36 @@
 # Makefile for gcc version of SDL
 #
 # changes:
+#  16-Feb-2025: integration to abyss-amiga-debug framework for elf
 #  18-Apr: _ApolloKeyRGB565toRGB565: disabled AMMX version of ColorKeying (for now, storem is not working in Gold2)
 #  17-Nov: - fixed Shadow Surfaces (hopefully), they were effectively impossible
 #            in the code base I got
 #          - fixed ARGB32 (CGX code was assuming RGBA all the time)
 #  12-Feb: - deleted redundant includes, now only SDL/ directory remains (as it should)
-BASE:= /Users/marcelo.lorenzati/.vscode/extensions/job.amiga-debug-job-1.7.7
-PREFX := $(BASE)/bin/darwin/opt
-SDK := $(BASE)/bin/darwin/opt/m68k-amiga-elf/sys-include
-STD := $(BASE)/template_libs/libs/library/include
+
+ifdef OS
+	WINDOWS = 1
+	SHELL = cmd.exe
+endif
+
+CCNAME = m68k-amiga-elf-gcc
+
+ifdef WINDOWS
+	PREFX = $(abspath $(dir $(shell where $(CCNAME)))..\)
+else
+	PREFX = $(abspath $(dir $(shell which $(CCNAME)))../)
+endif
+
 CC := $(PREFX)/bin/m68k-amiga-elf-gcc
 AS := $(PREFX)/bin/m68k-amiga-elf-as
-AR := $(BASE)/bin/darwin/opt/m68k-amiga-elf/bin/ar
 LD := $(PREFX)/bin/m68k-amiga-elf-ld
 RL := $(PREFX)/bin/m68k-amiga-elf-ranlib
-VASM := $(BASE)/bin/darwin/vasmm68k_mot
+
+AR   := $(PREFX)/../opt/m68k-amiga-elf/bin/ar
+VASM := $(PREFX)/../vasmm68k_mot
+SDK := $(PREFX)/m68k-amiga-elf/sys-include
+
+STD := $(PREFX)/../../../template_libs/libs/library/include
 
 CPU := 68030
 
