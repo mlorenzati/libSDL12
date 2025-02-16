@@ -23,17 +23,17 @@
 
 /* Gamma correction support */
 
-#ifdef HAVE_MATH_H
+//#ifdef HAVE_MATH_H
 #include <math.h>	/* Used for calculating gamma ramps */
-#else
-/* Math routines from uClibc: http://www.uclibc.org */
-#include "math_private.h"
-#include "e_sqrt.h"
-#include "e_pow.h"
-#include "e_log.h"
-#define pow(x, y)	__ieee754_pow(x, y)
-#define log(x)		__ieee754_log(x)
-#endif
+// #else
+// /* Math routines from uClibc: http://www.uclibc.org */
+// #include "math_private.h"
+// #include "e_sqrt.h"
+// #include "e_pow.h"
+// #include "e_log.h"
+// #define pow(x, y)	__ieee754_pow(x, y)
+// #define log(x)		__ieee754_log(x)
+// #endif
 
 #include "SDL_sysvideo.h"
 

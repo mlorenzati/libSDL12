@@ -76,7 +76,6 @@ extern struct DosLibrary *DOSBase;
 #define SignalSemaphore SignalSemaphorePPC
 
 #else
-
-#define SYS_ThreadHandle struct Task *
+//#define SYS_ThreadHandle struct Task *
 #endif /* WARPOS */
 

@@ -26,9 +26,11 @@
 static char rcsid =
  "@(#) $Id: SDL_systhread.c,v 1.2 2002/11/20 08:52:36 gabry Exp $";
 #endif
+//#include <dos/dostags.h>
 
 #include <proto/dos.h>
 #include <inline/dos.h>
+#include "SDL_systhread_c.h"
 
 #include "../../include/SDL/SDL.h"
 #include <exec/nodes.h>
@@ -66,7 +68,7 @@ __saveds __asm Uint32 RunThread(register __a0 char *args )
 #elif defined(__PPC__) || defined(AROS)
 Uint32 RunThread(char *)
 #elif !defined(SHARED_LIB)
-Uint32 __saveds
+Uint32 __attribute__((saveds))
 
 RunThread(char *p1)
 #else

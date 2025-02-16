@@ -32,7 +32,7 @@
 
 #define ASM
 #define ASMR(x) register
-#define ASMREG(x) __asm("" #x "")
+#define ASMREG(x)
 #define SAVEDS __saveds
 
 #else /* __GNUC__ */

@@ -6,23 +6,23 @@ ___gnu_compiled_c:
 .globl _WLUT
 
 _WLUT:
-	moveml #0x3f36,sp@-
-	movel sp@(48),a5
-	movel sp@(52),a3
-	movel sp@(56),d2
-	movel sp@(64),a2
-	movel sp@(68),d3
-	movel sp@(72),d4
-	movel sp@(76),d5
-	movel sp@(80),d6
-	movel sp@(84),d7
-	movel _CyberGfxBase,a6
-	movel sp@(44),a0
-	movew a5,d0
-	movew a3,d1
-	movel sp@(60),a1
+	movem.l #0x3f36, sp-1
+	move.l sp+48,a5
+	move.l sp+52,a3
+	move.l sp+56,d2
+	move.l sp+64,a2
+	move.l sp+68,d3
+	move.l sp+72,d4
+	move.l sp+76,d5
+	move.l sp+80,d6
+	move.l sp+84,d7
+	move.l _CyberGfxBase,a6
+	move.l sp+44,a0
+	move.w a5,d0
+	move.w a3,d1
+	move.l sp+60,a1
 #APP
-	jsr a6@(-0xc6:W)
+	jsr %a6@(-0xc6:W)
 #NO_APP
-	moveml sp@+,#0x6cfc
+	movem.l sp+1,#0x6cfc
 	rts

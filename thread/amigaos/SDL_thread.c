@@ -26,16 +26,20 @@ static char rcsid =
 #endif
 
 /* System independent thread management routines for SDL */
+#include <exec/types.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//#include <exec/exec.h>
+#include <inline/exec.h>
 
 #include "SDL_error.h"
 #include "SDL_mutex.h"
 #include "SDL_thread.h"
 #include "../SDL_thread_c.h"
 //#include "SDL_systhread.h"
+extern struct ExecBase *SysBase;
 
 #define ARRAY_CHUNKSIZE    32
 /* The array of threads currently active in the application
