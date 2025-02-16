@@ -11,9 +11,13 @@ http://www.libsdl.org/
 This library is distributed under the terms of the GNU LGPL license:
 http://www.gnu.org/copyleft/lesser.html
 
-
 Introduction
 ------------
+Update: this is a fork from original  AmigaPorts/libSDL12 but to compile with
+modern GCC and tools provided by https://github.com/jyoberle/vscode-amiga-debug
+which is a fork of https://github.com/BartmanAbyss/vscode-amiga-debug but with
+AmigaOS Libraries compiled with elf support.
+My attempt is to use this library in an app being built in https://github.com/mlorenzati/amidev
 
 This is one of the ports of SDL to the AmigaOS3/68k platform. I cannot
 comment much on the origins of the code contributions to this port. I've
@@ -29,6 +33,7 @@ This SDL version should work on all Amigas with RTG (Picasso96 or CyberGraphX).
 
 Building
 --------
+Update: Just install in vscode the vscode-amiga-debug extension from jyoberle (JOB) and use the build task
 
 Several Makefiles for different targets are present in this codebase. The one
 I was using for the AMMX enabled builds is "Makefile". The compilers I've 
