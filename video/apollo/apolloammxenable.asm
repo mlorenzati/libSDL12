@@ -6,9 +6,9 @@
 ;
 ;
 
-	XDEF	_Apollo_EnableAMMX
-	XDEF	_Apollo_AMMXon		;0.b = Off, 1.b = On
-	XDEF	_Apollo_AMMX2on		;0.b = Off, 1.b = On (BSEL, PCMP)
+	XDEF	Apollo_EnableAMMX
+	XDEF	Apollo_AMMXon		;0.b = Off, 1.b = On
+	XDEF	Apollo_AMMX2on		;0.b = Off, 1.b = On (BSEL, PCMP)
 
 
 	include	exec/types.i
@@ -22,9 +22,9 @@
 ; return: 0 = no AMMX available
 ;         1 = AMMX ready for use
 
-_Apollo_EnableAMMX:
+Apollo_EnableAMMX:
 		movem.l	d1-a6,-(sp)
-		sf	_Apollo_AMMX2on	
+		sf	Apollo_AMMX2on	
 
 		suba.l	a1,a1
 		move.l	4.w,a6
@@ -89,7 +89,7 @@ _Apollo_EnableAMMX:
 .noAMMX2:
 		endc
 
-		move.b	d0,_Apollo_AMMX2on	
+		move.b	d0,Apollo_AMMX2on	
 .enableAMMX:
 		; set Bit #11 in SR to announce the use of AMMX
 		move.l	4.w,a6
@@ -103,7 +103,7 @@ _Apollo_EnableAMMX:
 		moveq	#1,d0			;return: ok
 
 .noAMMX
-		move.b	d0,_Apollo_AMMXon	
+		move.b	d0,Apollo_AMMXon	
 		movem.l	(sp)+,d1-a6
 		rts
 
@@ -120,8 +120,8 @@ Apollo_TrapCatch:
 	section	data,bss
 
 TrapCaught:	 ds.b	1
-_Apollo_AMMXon:	 ds.b	1
-_Apollo_AMMX2on: ds.b	1
+Apollo_AMMXon:	 ds.b	1
+Apollo_AMMX2on: ds.b	1
 		 ds.b	1	;alignment
 
 

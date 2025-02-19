@@ -13,27 +13,27 @@ DEBUG		EQU	0
 DOFUSE68	EQU	1
 
 	ifne	DOFUSE68
-	XREF	_Apollo_AMMXon		;0.b = Off, 1.b = On
+	XREF	Apollo_AMMXon		;0.b = Off, 1.b = On
 _LVOCacheClearU     EQU   -636		;yes, yes I know...
 	endc
 
 	; target: RGB565
-	XDEF	_ApolloARGBtoRGB565
-	XDEF	_ApolloRGBtoRGB565	;
-	XDEF	_ApolloBGRtoRGB565
-	XDEF	_ApolloBGRAtoRGB565	;
+	XDEF	ApolloARGBtoRGB565
+	XDEF	ApolloRGBtoRGB565	;
+	XDEF	ApolloBGRtoRGB565
+	XDEF	ApolloBGRAtoRGB565	;
 
 
 	;target: RGB24
-	XDEF	_ApolloARGBtoRGB24
-	XDEF	_ApolloBGRAtoRGB24	;untested
-	XDEF	_ApolloBGRtoRGB24	; 24 Bit BGR to 24 Bit RGB24 (and vice versa)
+	XDEF	ApolloARGBtoRGB24
+	XDEF	ApolloBGRAtoRGB24	;untested
+	XDEF	ApolloBGRtoRGB24	; 24 Bit BGR to 24 Bit RGB24 (and vice versa)
 
 	;target: RGB32
-	XDEF	_ApolloARGBtoBGRA	; 32 Bit ARGB to 32 Bit BGRA (and vice versa)
+	XDEF	ApolloARGBtoBGRA	; 32 Bit ARGB to 32 Bit BGRA (and vice versa)
 
 	;target: Any (byte copy, rectangular) 
-	XDEF	_ApolloCopyRect
+	XDEF	ApolloCopyRect
 
 	machine	ac68080
 
@@ -176,7 +176,7 @@ BurnFuse:
 	movem.l	d0/a0,-(sp)
 	move.l	8(sp),a0	;return address (skipping the saved registers)
 
-	tst.b	_Apollo_AMMXon	;have Apollo AMMX ?
+	tst.b	Apollo_AMMXon	;have Apollo AMMX ?
 	beq.s	.burn68k
 
 	;
@@ -207,7 +207,7 @@ BurnFuse:
 
 
 
-_ApolloCopyRect:
+ApolloCopyRect:
 	movem.l	d4-d5,-(sp)
 
 	FUSE68	m68kCopyRect	;trash: d4,d5
@@ -255,7 +255,7 @@ m68kCopyRect:
 ;------------------------------------------------------------------------------------------------
 
 ; 32 Bit ARGB32 to 16 Bit RGB565
-_ApolloARGBtoRGB565:
+ApolloARGBtoRGB565:
 	movem.l	d4-d5,-(sp)
 
 	FUSE68	m68kARGBtoRGB565	;trash: d4,d5
@@ -285,7 +285,7 @@ _ApolloARGBtoRGB565:
 
 
 ; 24 Bit BGR24 to 16 Bit RGB565
-_ApolloBGRtoRGB565:
+ApolloBGRtoRGB565:
 	movem.l	d4-d5,-(sp)
 
 	FUSE68	m68kBGRtoRGB565	;trash: d4,d5
@@ -319,7 +319,7 @@ _ApolloBGRtoRGB565:
 	rts
 
 ; 24 Bit RGB24 to 16 Bit RGB565
-_ApolloRGBtoRGB565:
+ApolloRGBtoRGB565:
 	movem.l	d4-d5,-(sp)
 
 	FUSE68	m68kRGBtoRGB565	;trash: d4,d5
@@ -355,7 +355,7 @@ _ApolloRGBtoRGB565:
 
 
 ; 32 Bit BGRA to 16 Bit RGB565
-_ApolloBGRAtoRGB565:
+ApolloBGRAtoRGB565:
 	movem.l	d4-d5,-(sp)
 	FUSE68	m68kBGRAtoRGB565	;permanently branch to plain 68k Routine if AMMX is unavailable
 
@@ -576,7 +576,7 @@ m68kBGRAtoRGB565:
 ;------------------------------------------------------------------------------------------------
 
 ; 32 Bit ARGB to 24 Bit RGB24
-_ApolloARGBtoRGB24:
+ApolloARGBtoRGB24:
 	movem.l	d4-d5,-(sp)
 	FUSE68	m68kARGBtoRGB24	;trash: d4,d5
 
@@ -610,7 +610,7 @@ _ApolloARGBtoRGB24:
 
 
 ; 32 Bit BGRA to 24 Bit RGB24
-_ApolloBGRAtoRGB24:
+ApolloBGRAtoRGB24:
 	movem.l	d4-d5,-(sp)
 	FUSE68	m68kBGRAtoRGB24	;trash: d4,d5
 
@@ -644,7 +644,7 @@ _ApolloBGRAtoRGB24:
 
 
 ; 24 Bit BGR to 24 Bit RGB24 (and vice versa)
-_ApolloBGRtoRGB24:
+ApolloBGRtoRGB24:
 	movem.l	d4-d5,-(sp)
 	FUSE68	m68kBGRtoRGB24	;trash: d4,d5
 
@@ -767,7 +767,7 @@ m68kBGRtoRGB24:
 ;------------------------------------------------------------------------------------------------
 
 ; 32 Bit ARGB to 32 Bit BGRA (and vice versa)
-_ApolloARGBtoBGRA:
+ApolloARGBtoBGRA:
 	movem.l	d4-d5,-(sp)
 	FUSE68	m68kARGBtoBGRA	;trash: d4,d5
 

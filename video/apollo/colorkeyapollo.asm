@@ -13,18 +13,18 @@ DEBUG	EQU	0
 ; of this define is FALSE (=0), the code will be Apollo only
 DOFUSE68	EQU	1
 FUSE68CHECK	macro
-	tst.b	_Apollo_AMMX2on	;have Apollo AMMX2 ? (AMMX1: _Apollo_AMMXon
+	tst.b	Apollo_AMMX2on	;have Apollo AMMX2 ? (AMMX1: Apollo_AMMXon
 		endm
 
 	ifne	DOFUSE68
-	XREF	_Apollo_AMMXon		;0.b = Off, 1.b = On
-	XREF	_Apollo_AMMX2on
+	XREF	Apollo_AMMXon		;0.b = Off, 1.b = On
+	XREF	Apollo_AMMX2on
 _LVOCacheClearU     EQU   -636		;yes, yes I know...
 	endc
 
 
-	XDEF	_ApolloKeyARGBtoARGB		;TODO
-	XDEF	_ApolloKeyRGB565toRGB565	;
+	XDEF	ApolloKeyARGBtoARGB		;TODO
+	XDEF	ApolloKeyRGB565toRGB565	;
 
 
 	machine	ac68080
@@ -166,14 +166,14 @@ BurnFuse:
 ; Out:
 ;     -
 
-_ApolloKeyARGBtoARGB:
+ApolloKeyARGBtoARGB:
 
 	rts
 
 ;BlitNtoNPixelAlpha
 
 ;D6 = key color
-_ApolloKeyRGB565toRGB565:
+ApolloKeyRGB565toRGB565:
 	movem.l	d4-d5,-(sp)
 	bra	m68kKeyRGB565toRGB565
 ;	FUSE68	m68kKeyRGB565toRGB565

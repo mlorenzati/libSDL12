@@ -2,7 +2,7 @@
 #
 # changes:
 #  16-Feb-2025: integration to abyss-amiga-debug framework for elf
-#  18-Apr: _ApolloKeyRGB565toRGB565: disabled AMMX version of ColorKeying (for now, storem is not working in Gold2)
+#  18-Apr: ApolloKeyRGB565toRGB565: disabled AMMX version of ColorKeying (for now, storem is not working in Gold2)
 #  17-Nov: - fixed Shadow Surfaces (hopefully), they were effectively impossible
 #            in the code base I got
 #          - fixed ARGB32 (CGX code was assuming RGBA all the time)
