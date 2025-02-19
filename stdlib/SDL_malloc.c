@@ -24,7 +24,7 @@
 /* This file contains portable memory management functions for SDL */
 
 #include "SDL_stdinc.h"
-#define LACKS_SYS_MMAN_H 
+
 #ifndef HAVE_MALLOC
 
 #define LACKS_SYS_TYPES_H
@@ -553,8 +553,6 @@ DEFAULT_MMAP_THRESHOLD       default: 256K
 #define HAVE_MREMAP 1
 #else   /* linux */
 #define HAVE_MREMAP 0
-#define HAVE_MMAP 0
-#define HAVE_MORECORE 0
 #endif  /* linux */
 #endif  /* HAVE_MREMAP */
 #ifndef MALLOC_FAILURE_ACTION
@@ -1324,7 +1322,7 @@ extern void*     sbrk(ptrdiff_t);
 /* MORECORE and MMAP must return MFAIL on failure */
 #define MFAIL                ((void*)(MAX_SIZE_T))
 #define CMFAIL               ((char*)(MFAIL)) /* defined for convenience */
-#define HAVE_MMAP 0
+
 #if !HAVE_MMAP
 #define IS_MMAPPED_BIT       (SIZE_T_ZERO)
 #define USE_MMAP_BIT         (SIZE_T_ZERO)

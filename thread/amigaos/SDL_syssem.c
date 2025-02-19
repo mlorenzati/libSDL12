@@ -39,7 +39,6 @@
 				WarpOS code removed
 
 */
-#include <exec/types.h>
 #include <SDL_config.h>
 
 #ifdef SAVE_RCSID

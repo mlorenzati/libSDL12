@@ -41,7 +41,7 @@ INCLUDES = IDIR=./include/SDL
 GCCFLAGS = -I$(SDK) -I$(STD) -I$(PREFX)/include -I./include/ -I./include/SDL \
 		-Ofast -fomit-frame-pointer -m68030 -mhard-float -ffast-math \
 		-flto -fno-builtin -fomit-frame-pointer -MMD -MP\
-		-DNOIXEMUL -D_HAVE_STDINT_H
+		-DNOIXEMUL -D_HAVE_STDINT_H -D__AMIGA__
 GLFLAGS = -DSHARED_LIB -lamiga
 GCCFLAGS += -DNO_AMIGADEBUG
 GLFLAGS  += -DNO_AMIGADEBUG
