@@ -67,7 +67,7 @@ GOBJS = audio/SDL_audio.o audio/SDL_audiocvt.o audio/SDL_mixer.o audio/SDL_mixer
 # BEGIN APOLLO ASM SUPPORT
 # ( build vasm: make CPU=m68k SYNTAX=mot )
 #
-VFLAGS = -devpac -I$(SDK) -I$(PREFX)/m68k-amigaos/ndk-include -Felf
+VFLAGS = -Felf -devpac -I$(SDK) -I$(PREFX)/m68k-amigaos/ndk-include 
 GCCFLAGS += -DAPOLLO_BLIT -I./video/apollo
 #GCCFLAGS += -DAPOLLO_BLITDBG
 GOBJS += video/apollo/blitapollo.o video/apollo/apolloammxenable.o video/apollo/colorkeyapollo.o
