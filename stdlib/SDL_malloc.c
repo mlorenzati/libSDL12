@@ -553,6 +553,8 @@ DEFAULT_MMAP_THRESHOLD       default: 256K
 #define HAVE_MREMAP 1
 #else   /* linux */
 #define HAVE_MREMAP 0
+#define HAVE_MMAP 0
+#define HAVE_MORECORE 0
 #endif  /* linux */
 #endif  /* HAVE_MREMAP */
 #ifndef MALLOC_FAILURE_ACTION
